@@ -1,0 +1,15 @@
+{
+  "name": "docker_report_app",
+  "version": "1.0.0",
+  "description": "This is a repo for a small web application using Docker. It's a work in progress",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
