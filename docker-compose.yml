@@ -1,0 +1,26 @@
+services:
+  #Add the node-js service
+  node:
+  #location to node.js dockerfile
+    build: 
+      context: ./back-end
+      dockerfile: Dockerfile
+    ports:
+      #host port: container port
+      - "8080:8080"
+    volumes:
+      #bind-mounts configuration
+      - ./back-end:/app
+      #ignore changes in node_modules folder
+      - /app/node_modules
+
+  react:
+    # Location to the react.js dockerfile
+    build: 
+      context: ./front-end
+      # Name of the dockerfile
+      dockerfile: Dockerfile
+    ports:
+    # Host port:Container port
+      - '3000:3000'
+    stdin_open: true
