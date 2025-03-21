@@ -14,7 +14,7 @@ RUN npm install
 #Copying all the application source code and files to the working directory `app`
 COPY . .
 
-#Exposing the container to run on this port 4000
+#Exposing the container to run on this port 3000
 EXPOSE 3000
 
 #Command to start the Docker container for the 

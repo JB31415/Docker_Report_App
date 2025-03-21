@@ -10,7 +10,7 @@ COPY package*.json app.js ./
 #Install dependencies
 RUN npm install
 
-#Use port 4000
+#Use port 8080
 EXPOSE 8080
 
 #Run the app
