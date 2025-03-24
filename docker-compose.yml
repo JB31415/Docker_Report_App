@@ -1,7 +1,15 @@
 services:
+
+  #mysql database used to store data 
+  db:
+    image: mysql
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: default_pass
+    
   #Add the node-js service
   node:
-  #location to node.js dockerfile
+    #location to node.js dockerfile
     build: 
       context: ./back-end
       dockerfile: Dockerfile
@@ -13,7 +21,8 @@ services:
       - ./back-end:/app
       #ignore changes in node_modules folder
       - /app/node_modules
-
+      
+  #React front end 
   react:
     # Location to the react.js dockerfile
     build: 
@@ -24,3 +33,12 @@ services:
     # Host port:Container port
       - '3000:3000'
     stdin_open: true
+    
+    #Only start when database is up and running. 
+    depends_on:
+      db:
+        condition: service_healthy
+    
+  
+  
+ 

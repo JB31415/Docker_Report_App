@@ -6,10 +6,10 @@ import "dotenv/config.js";
 
 //Connect to database, replace with your own .env file
 var test_database = await mysql.createConnection({
-    host: "localhost",    //Set name of network host
+    host: "db",    //Set name of network host
     user: "root",         //Set username, in this case root
-    password: process.env.DATABASE_PASS, //Set password
-    database: "test_schema"
+    password: "default_pass", //Set password
+    database: "placeholder"
 }) 
 
 
