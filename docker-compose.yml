@@ -6,6 +6,10 @@ services:
     restart: always
     environment:
         MYSQL_ROOT_PASSWORD: default_pass
+        MYSQL_DATABASE: placeholder
+    volumes:
+        - /mysql_data:/var/lib/mysql
+            
     
   #Add the node-js service
   node:
@@ -38,7 +42,5 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    
-  
-  
+
  
