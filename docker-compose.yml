@@ -2,13 +2,16 @@ services:
 
   #mysql database used to store data 
   db:
-    image: mysql
+    image: mysql:latest
     restart: always
     environment:
         MYSQL_ROOT_PASSWORD: default_pass
         MYSQL_DATABASE: placeholder
     volumes:
-        - /mysql_data:/var/lib/mysql
+        - ./mysql_data:/var/lib/mysql
+    healthcheck:
+      test: mysql -u root -pdefault_pass || exit 1
+      
             
     
   #Add the node-js service
@@ -25,6 +28,9 @@ services:
       - ./back-end:/app
       #ignore changes in node_modules folder
       - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
       
   #React front end 
   react:
@@ -39,8 +45,6 @@ services:
     stdin_open: true
     
     #Only start when database is up and running. 
-    depends_on:
-      db:
-        condition: service_healthy
+    
 
  

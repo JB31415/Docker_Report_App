@@ -1,0 +1,1 @@
+This is the local storage for the mysql database files. It will be empty until the container is run and everything is generated. 
