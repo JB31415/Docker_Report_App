@@ -4,7 +4,7 @@ import mysql from 'mysql2/promise';
 import "dotenv/config.js";
 
 
-//Connect to database, replace with your own .env file
+//Create connection to database, replace with your own .env file
 var test_database = await mysql.createConnection({
     host: "db",    //Set name of network host
     user: "root",         //Set username, in this case root
@@ -13,27 +13,33 @@ var test_database = await mysql.createConnection({
 }) 
 
 
-//Start Database
+//Connect to Database
 test_database.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
   });
 
-
-var result = "default value"; 
-
 //Query the database
-try{
-    const [results] = await test_database.query(
+async function queryDatabase() {
+
+    //Results will store and return the query, default to -1 for testing
+    var results = -1
+    try{     
+        //Get all rows from table
+        results = await test_database.query(
         'SELECT * FROM `test_table`'
-    );
+    )   
+    }
+    //If there's an error, log it to console. 
+    catch (err) {
+        console.log(err);
+    }
 
-    result = results;
+    //Returns the result of the query. 
+    return results;
+    
 
-} catch (err) {
-    console.log(err);
 }
-
 
 //Now start the server
 const app = express();
@@ -48,7 +54,10 @@ app.post("/", (req, res) => {
 
 //If you send an http get request.
 app.get("/", (req, res) => {
-    res.send(result);
+    
+    //Sends the results of the database query
+    res.send(queryDatabase());
+    
 })
 
 const PORT = process.env.PORT || 8080;
