@@ -7,21 +7,35 @@ export function SubmissionForm(){
     const [form, setForm] = useState({date: '', information: '', user: ''});
 
 
-    const handleChange = (field) => {
-        return (event) => {
-            //... is the spread operator, it copies all the properties of form into a new object
-            //and then we add the new property to that object.
-            setForm({...form, [field]: event.target.value});
+    const handleSubmit = (event) => {
+        //Prevent refresh of page
+        event.preventDefault(); 
+        console.log(JSON.stringify(form));
+
+        //Define the format of the post request
+        const requestOptions = {
+            method: 'POST', 
+            
+            headers: {"Content-Type": 'application/json'},
+            body: JSON.stringify(form),
         };
+        
+        fetch('http://localhost:8080/api/posts', requestOptions);
+        
+    }
+
+    const handleChange = (field) => {
+        setForm({...form, [field.target.name]: field.target.value});
     };
 
     return(
-        <form onSubmit = {() => {}}>
+        <form onSubmit = {handleSubmit}>
                         <div><label>Date of Report</label></div>
                         <input
                             type="date"
                             name="date"
                             placeholder="Date"
+                            value = {form.date}
                             onChange={handleChange}
                         ></input>
 
@@ -30,6 +44,7 @@ export function SubmissionForm(){
                             type="text"
                             name="information"
                             placeholder="Information"
+                            value = {form.information}
                             onChange={handleChange}
                         ></input>
 
@@ -38,12 +53,13 @@ export function SubmissionForm(){
                             type="text"
                             name="user"
                             placeholder="User"
+                            value={form.user}
                             onChange={handleChange}
                         ></input>
 
-                        <div><input 
+                        <div><button
                             type = "submit" 
-                            value = "Submit"></input></div>
+                            >Submit</button></div>
         
                 </form>
     )
