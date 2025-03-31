@@ -2,9 +2,10 @@ import express from 'express';
 import cors from 'cors'
 import mysql from 'mysql2/promise';
 import "dotenv/config.js";
+import bodyParser from 'body-parser';
 
 
-//Create connection to database, replace with your own .env file
+//Connect to database, replace with your own .env file
 var test_database = await mysql.createConnection({
     host: "db",    //Set name of network host
     user: "root",         //Set username, in this case root
@@ -13,51 +14,47 @@ var test_database = await mysql.createConnection({
 }) 
 
 
-//Connect to Database
+//Start Database
 test_database.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
   });
 
+
+var result = "default value"; 
+
 //Query the database
-async function queryDatabase() {
-
-    //Results will store and return the query, default to -1 for testing
-    var results = -1
-    try{     
-        //Get all rows from table
-        results = await test_database.query(
+try{
+    const [results] = await test_database.query(
         'SELECT * FROM `test_table`'
-    )   
-    }
-    //If there's an error, log it to console. 
-    catch (err) {
-        console.log(err);
-    }
+    );
 
-    //Returns the result of the query. 
-    return results;
-    
+    result = results;
 
+} catch (err) {
+    console.log(err);
 }
+
 
 //Now start the server
 const app = express();
-app.use(cors())
+app.use(cors({}));
+
+//Use JSON body parser middleware
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 
 //If you send an http post request. 
-app.post("/", (req, res) => {
-    console.log("Connected to React");
-    res.redirect("localhost:3000");
+app.post("/api/posts", (req, res) => {
+    //Print body
+    console.log(req.body);
+    res.redirect("http://localhost:3000");
 });
 
 //If you send an http get request.
 app.get("/", (req, res) => {
-    
-    //Sends the results of the database query
-    res.send(queryDatabase());
-    
+    res.send(result);
 })
 
 const PORT = process.env.PORT || 8080;
