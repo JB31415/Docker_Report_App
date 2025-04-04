@@ -1,11 +1,9 @@
 import React, { useState} from "react";
 
 
-
+//React component for the submission forms
 export function SubmissionForm(){
-
     const [form, setForm] = useState({date: '', information: '', user: ''});
-
 
     const handleSubmit = (event) => {
         //Prevent refresh of page

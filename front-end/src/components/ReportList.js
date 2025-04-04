@@ -1,30 +1,39 @@
 import React from "react";
+import {useState, useEffect} from 'react';
 
-export function ReportList({dataArray = []}) {
+//Creates a list of various ReportLine components representing every report in a MySQL database
+export function ReportList() {
     
-    //Default array when no data array passed to function
-    const defaultArray = [
-        {name: "Jim", id: 101,}, 
-        {name: "Henry", id: 102}
-    ];
+    //State variables
+    const [data, setData] = useState([]);
 
-    //If passed dataArray is empty, set to default array
-    if (dataArray.length === 0){
-        dataArray = defaultArray; 
-    }
-    
+    //Fetch the updated response from the API 
+    //Note, useEffect() is supposed to have an array of variables as an argument that when updated, will call fetch to update the state. 
+    //I have not implemented this part yet but it is on my to-do list. 
+    useEffect(() => {
+        //Fetch data from API
+        fetch('http://localhost:8080')
+            //Turn data into object
+            .then(response => response.json())
+            //Update the state of component
+            .then(json => {
+                setData(json);
+            });
+    }, []);
     return(
-        //Map each element of defaultArray called line to a ReportLine construction function while passing the data. 
-        defaultArray.map(line => <ReportLine key = {line.name} name = {line.name} id = {line.id} /> 
-        
+        //Map each element of data called line to a ReportLine construction function while passing the data. 
+        data.map(line => <ReportLine key = {line.name} name = {line.name} id = {line.ID} /> 
         )
 
     );
 }
 
+
+
 //This component represents an individual line in the ReportList component
 export function ReportLine({name, id}){
 
+    //Styles
     const ulStyle = {
         backgroundColor: "blue", 
         borderStyle: "solid",
@@ -32,7 +41,6 @@ export function ReportLine({name, id}){
         
         
     }
-
     const liStyle = {
         border: "20px black",
         padding: "10px",
@@ -41,6 +49,7 @@ export function ReportLine({name, id}){
     }
 
 
+    //Return the HTML lists
     return (
         <div>
             <ul style = {ulStyle}>
@@ -51,3 +60,4 @@ export function ReportLine({name, id}){
     );
 
 }
+

@@ -1,7 +1,7 @@
 import logo from "./assets/logo.svg";
 import "./App.css";
 import {SubmissionForm} from "./components/submissionForm.js"; 
-import { ReportList } from "./components/ReportList.js";
+import {ReportList}  from "./components/ReportList.js";
 
 function App() {
     return (
@@ -21,8 +21,7 @@ function App() {
                     className="form">
                 </form>
                 <SubmissionForm />
-
-                <ReportList/>
+                <ReportList/>{}
                 
             </header>
             
