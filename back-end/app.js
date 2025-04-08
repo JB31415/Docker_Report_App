@@ -10,17 +10,17 @@ import "dotenv/config.js";
 import bodyParser from 'body-parser';
 
 
-//Connect to database, replace with your own .env file
-var test_database = await mysql.createConnection({
+//Connect to database, replace with your own .env file if needed
+var prod_database = await mysql.createConnection({
     host: "db",                 //Set name of network host
     user: "root",               //Set username, in this case root
     password: "default_pass",   //Set password
-    database: "placeholder"     //Set Database Name
+    database: "prod_database"     //Set Database Name
 }) 
 
 
 //Start Database
-test_database.connect(function(err) {
+prod_database.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
   });
@@ -32,8 +32,8 @@ async function queryDatabase() {
 
     try{     
         //Get all rows from table
-        results = await test_database.query(
-            'SELECT * FROM `test_table`');   
+        results = await prod_database.query(
+            'SELECT * FROM `reportList`;');   
     }
     //If there's an error, log it to console. 
     catch (err) {
@@ -42,6 +42,40 @@ async function queryDatabase() {
 
     return results; 
 }
+
+
+/**
+ * 
+ * @param {*Object} reportLine
+ * @returns 
+ */
+//postDatabase takes an object posted from the React frontend and adds it to the MySQL database through a insert query
+async function postDatabase(reportLine){
+    
+    //If empty object, just exit function
+    /*if(reportLine.keys.length === 0){
+        return -1;
+    }*/
+
+    //Extract properties of the POST request
+    var date = reportLine.date;
+    var information = reportLine.information; 
+    var user = reportLine.user; 
+
+    
+
+    //Insert values into MySQL 
+    try{
+        results = await prod_database.query(
+            `INSERT INTO reportList VALUES ('${date}', '${information}',  '${user}');`
+        );
+    }
+    catch (err){
+        console.log(err);
+    }
+
+    
+};
 
 //Now start the server
 const app = express();
@@ -60,6 +94,7 @@ app.post("/api/posts", (req, res) => {
     //Clean Data
 
     //Send data to MySQL server
+    postDatabase(req.body);
 
     //Refresh page
     res.redirect("http://localhost:3000");

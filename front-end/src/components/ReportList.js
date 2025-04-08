@@ -21,8 +21,9 @@ export function ReportList() {
             });
     }, []);
     return(
+        //May want to change key to something other than Index for performance reasons
         //Map each element of data called line to a ReportLine construction function while passing the data. 
-        data.map(line => <ReportLine key = {line.name} name = {line.name} id = {line.ID} /> 
+        data.map(line => <ReportLine key = {line.index} date = {line.REPORT_DATE} info = {line.INFO} user = {line.USER} /> 
         )
 
     );
@@ -31,7 +32,7 @@ export function ReportList() {
 
 
 //This component represents an individual line in the ReportList component
-export function ReportLine({name, id}){
+export function ReportLine({date, info, user}){
 
     //Styles
     const ulStyle = {
@@ -53,8 +54,9 @@ export function ReportLine({name, id}){
     return (
         <div>
             <ul style = {ulStyle}>
-                <li style = {liStyle}>Name: {name}</li>
-                <li style = {liStyle}>ID: {id}</li>
+                <li style = {liStyle}>Date: {date}</li>
+                <li style = {liStyle}>Info: {info}</li>
+                <li style = {liStyle}>User: {user}</li>
             </ul>
         </div>
     );
