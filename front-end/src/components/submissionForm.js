@@ -18,9 +18,10 @@ export function SubmissionForm(){
             body: JSON.stringify(form),
         };
         
-        fetch('http://localhost:8080/api/posts', requestOptions);
+        //Collect response, currently unimplemented
+        var response = fetch('http://localhost:8080/api/posts', requestOptions);
         
-    }
+    };
 
     const handleChange = (field) => {
         setForm({...form, [field.target.name]: field.target.value});
@@ -61,5 +62,5 @@ export function SubmissionForm(){
         
                 </form>
     )
-}
+};
 

@@ -1,6 +1,7 @@
 import React from "react";
 import {useState, useEffect} from 'react';
 import "../css/errorHandling.css" ; 
+import {deleteRequest} from "../api/deleteRequest.js";
 
 //Creates a list of various ReportLine components representing every report in a MySQL database
 export function ReportList() {
@@ -55,19 +56,39 @@ export function ReportLine({date, info, user}){
     const ulStyle = {
         backgroundColor: "blue", 
         borderStyle: "solid",
-        borderWidth: "5px"
+        borderWidth: "2px"
         
         
     }
     const liStyle = {
         border: "20px black",
         padding: "10px",
-        
         display: "inline",
+        align: "center",
     }
 
     function DeleteQuery(){
-        console.log("test");
+        
+        
+        //Collect state info into object
+        const infoState = {
+            "date": date,
+            "info": info,
+            "user": user,
+        };
+
+
+
+        //Send it to API handler, get response back 
+        var response = deleteRequest(infoState);
+
+
+        //TODO: Verify delete request has processed
+
+        //TODO: Update the state somehow
+        
+
+
     }
 
     //Return the HTML lists
@@ -77,7 +98,7 @@ export function ReportLine({date, info, user}){
                 <li style = {liStyle}>Date: {date}</li>
                 <li style = {liStyle}>Info: {info}</li>
                 <li style = {liStyle}>User: {user}</li>
-                <li style = {liStyle}><button onClick={DeleteQuery()}></button></li> 
+                <li style = {liStyle}><button onClick={DeleteQuery}>Delete</button></li> 
             </ul>
         </div>
     );

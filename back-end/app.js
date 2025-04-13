@@ -110,6 +110,17 @@ app.get("/", (req, res) => {
      .then((data) => res.send(data[0]));
 });
 
+app.delete("/api/delete", (req, res) => {
+    
+    //Print delete request body, should contain the information
+    console.log(req.body);
+
+    //TODO: Verify 
+
+    //TODO: Query
+
+
+}
 
 //Assign port
 const PORT = process.env.PORT || 8080;
