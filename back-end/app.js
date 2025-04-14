@@ -27,8 +27,8 @@ prod_database.connect(function(err) {
 
 //Queries database for the entire table specified in createConnection()
 async function queryDatabase() {
-    //Results will store and return the query, default to -1 for testing
-    var results = -1;
+
+    var results = -1; 
 
     try{     
         //Get all rows from table
@@ -50,23 +50,16 @@ async function queryDatabase() {
  * @returns 
  */
 //postDatabase takes an object posted from the React frontend and adds it to the MySQL database through a insert query
-async function postDatabase(reportLine){
-    
-    //If empty object, just exit function
-    /*if(reportLine.keys.length === 0){
-        return -1;
-    }*/
+async function postReport(reportLine){
 
     //Extract properties of the POST request
     var date = reportLine.date;
     var information = reportLine.information; 
     var user = reportLine.user; 
 
-    
-
     //Insert values into MySQL 
     try{
-        results = await prod_database.query(
+        await prod_database.query(
             `INSERT INTO reportList VALUES ('${date}', '${information}',  '${user}');`
         );
     }
@@ -75,6 +68,29 @@ async function postDatabase(reportLine){
     }
 
     
+};
+
+//Deletes row of a table given a javascript object representing it.
+async function deleteReport(reportLine){
+
+    //Get individual elements 
+    var date = reportLine.date;
+    var info = reportLine.info; 
+    var user = reportLine.user; 
+
+    //Cuts off the time component of the date. 
+    date = date.substr(0, date.search("T"));
+
+    try{
+        //Query the table to delete based on individual elements
+        await prod_database.query(
+            `DELETE FROM reportList WHERE REPORT_DATE = "${date}" and INFO = '${info}' and USER = '${user}';`
+        );
+    }
+    catch(err){
+        console.log(err);
+    }
+
 };
 
 //Now start the server
@@ -94,7 +110,7 @@ app.post("/api/posts", (req, res) => {
     //Clean Data
 
     //Send data to MySQL server
-    postDatabase(req.body);
+    postReport(req.body);
 
     //Refresh page
     res.redirect("http://localhost:3000");
@@ -117,10 +133,14 @@ app.delete("/api/delete", (req, res) => {
 
     //TODO: Verify 
 
-    //TODO: Query
 
+    //TODO: Query the table to delete
+    deleteReport(req.body);
 
-}
+    //Refresh
+    res.redirect("http://localhost:3000");
+
+}); 
 
 //Assign port
 const PORT = process.env.PORT || 8080;
