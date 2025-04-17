@@ -40,6 +40,7 @@ async function queryDatabase() {
         console.log(err);
     }
 
+    //Return rows
     return results; 
 }
 
@@ -93,6 +94,9 @@ async function deleteReport(reportLine){
 
 };
 
+
+//SERVER OPTIONS AND MIDDLEWARE
+
 //Now start the server
 const app = express();
 //Use cors for cross site access
@@ -104,10 +108,11 @@ app.use(bodyParser.json());
 
 //If you send an http post request. 
 app.post("/api/posts", (req, res) => {
+
     //Print body
     console.log(req.body);
 
-    //Clean Data
+    //TODO: Clean Data
 
     //Send data to MySQL server
     postReport(req.body);
@@ -116,31 +121,36 @@ app.post("/api/posts", (req, res) => {
     res.redirect("http://localhost:3000");
 });
 
-//If you send an http get request...
+
+
+//If you send an http get request to root ...
 app.get("/", (req, res) => {
 
-    //Clean the response (if needed)
+
+    //TODO: Clean the response
 
     //Send the table. 
     queryDatabase()
      .then((data) => res.send(data[0]));
 });
 
+//If you get an httpy delete request at /api/delete
 app.delete("/api/delete", (req, res) => {
     
     //Print delete request body, should contain the information
     console.log(req.body);
 
-    //TODO: Verify 
+    //TODO: Verify and clean Data
 
 
-    //TODO: Query the table to delete
+    //Query the table to delete row
     deleteReport(req.body);
 
-    //Refresh
+    //Refresh page
     res.redirect("http://localhost:3000");
 
 }); 
+
 
 //Assign port
 const PORT = process.env.PORT || 8080;
